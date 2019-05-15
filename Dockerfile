@@ -53,8 +53,8 @@ RUN apt-get update &&  \
     rm -f android-tools-sdk.zip && \
 
 # Install Gradle
-    mkdir  /opt/gradle && cd /opt/gradle && \
-    wget --output-document=gradle.zip --quiet https://services.gradle.org/distributions/gradle-"$GRADLE_VERSION"-bin.zip && \
+RUN mkdir /opt/gradle && cd /opt/gradle && \
+    wget --output-document=gradle.zip --quiet https://downloads.gradle.org/distributions/gradle-"$GRADLE_VERSION"-bin.zip && \
     unzip -q gradle.zip && \
     rm -f gradle.zip && \
     chown -R root. /opt
