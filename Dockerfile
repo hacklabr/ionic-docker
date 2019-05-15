@@ -26,30 +26,30 @@ RUN apt-get update &&  \
     apt-get clean && \
     rm google-chrome-stable_current_amd64.deb && \
     mkdir Sources && \
-    mkdir -p /root/.cache/yarn/ && \
+    mkdir -p /root/.cache/yarn/
 
 # Font libraries
-    apt-get -qqy install fonts-ipafont-gothic xfonts-100dpi xfonts-75dpi xfonts-cyrillic xfonts-scalable libfreetype6 libfontconfig && \
+RUN apt-get -qqy install fonts-ipafont-gothic xfonts-100dpi xfonts-75dpi xfonts-cyrillic xfonts-scalable libfreetype6 libfontconfig
 
 # install python-software-properties (so you can do add-apt-repository)
-    apt-get update && apt-get install -y -q python-software-properties software-properties-common  && \
-    add-apt-repository "deb http://ppa.launchpad.net/webupd8team/java/ubuntu xenial main" -y && \
-    echo oracle-java8-installer shared/accepted-oracle-license-v1-1 select true | /usr/bin/debconf-set-selections && \
-    apt-get update && apt-get -y install oracle-java8-installer && \
+RUN apt-get update && apt-get install -y -q python-software-properties software-properties-common  && \
+    echo "deb [check-valid-until=no] http://archive.debian.org/debian jessie-backports main" > /etc/apt/sources.list.d/jessie-backports.list && \
+    apt-get -o Acquire::Check-Valid-Until=false update && \
+    apt-get install -y -t jessie-backports openjdk-8-jdk
 
 # System libs for android enviroment
-    echo ANDROID_HOME="${ANDROID_HOME}" >> /etc/environment && \
+RUN echo ANDROID_HOME="${ANDROID_HOME}" >> /etc/environment && \
     dpkg --add-architecture i386 && \
     apt-get install -y --force-yes expect ant wget libc6-i386 lib32stdc++6 lib32gcc1 lib32ncurses5 lib32z1 qemu-kvm kmod && \
     apt-get clean && \
     apt-get autoclean && \
-    rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* && \
+    rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
 # Install Android Tools
 RUN mkdir  /opt/android-sdk-linux && cd /opt/android-sdk-linux && \
     wget --output-document=android-tools-sdk.zip --quiet https://dl.google.com/android/repository/sdk-tools-linux-4333796.zip && \
     unzip -q android-tools-sdk.zip && \
-    rm -f android-tools-sdk.zip && \
+    rm -f android-tools-sdk.zip
 
 # Install Gradle
 RUN mkdir /opt/gradle && cd /opt/gradle && \
