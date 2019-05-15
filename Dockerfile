@@ -47,8 +47,8 @@ RUN apt-get update &&  \
     rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* && \
 
 # Install Android Tools
-    mkdir  /opt/android-sdk-linux && cd /opt/android-sdk-linux && \
-    wget --output-document=android-tools-sdk.zip --quiet https://dl.google.com/android/repository/tools_r25.2.3-linux.zip && \
+RUN mkdir  /opt/android-sdk-linux && cd /opt/android-sdk-linux && \
+    wget --output-document=android-tools-sdk.zip --quiet https://dl.google.com/android/repository/sdk-tools-linux-4333796.zip && \
     unzip -q android-tools-sdk.zip && \
     rm -f android-tools-sdk.zip && \
 
