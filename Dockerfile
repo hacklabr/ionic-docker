@@ -3,11 +3,13 @@ MAINTAINER marco [dot] turi [at] hotmail [dot] it
 
 ENV DEBIAN_FRONTEND=noninteractive \
     ANDROID_HOME=/opt/android-sdk-linux \
-    NPM_VERSION=6.5.0 \
-    IONIC_VERSION=4.5.0 \
-    CORDOVA_VERSION=8.1.2 \
-    YARN_VERSION=1.12.3 \
-    GRADLE_VERSION=4.10.3 \
+    NPM_VERSION=6.14.9 \
+    IONIC_VERSION=5.4.16 \
+    CORDOVA_VERSION=10.0.0 \
+    CORDOVA_RES_VERSION=0.15.2 \
+    NATIVE_RUN_VERSION=1.3.0 \
+    YARN_VERSION=1.22.10 \
+    GRADLE_VERSION=6.7.1 \
     # Fix for the issue with Selenium, as described here:
     # https://github.com/SeleniumHQ/docker-selenium/issues/87
     DBUS_SESSION_BUS_ADDRESS=/dev/null
@@ -18,8 +20,6 @@ RUN apt-get update &&  \
     curl -sL https://deb.nodesource.com/setup_10.x | bash - && \
     apt-get update &&  \
     apt-get install -y nodejs && \
-    npm install -g npm@"$NPM_VERSION" cordova@"$CORDOVA_VERSION" ionic@"$IONIC_VERSION" yarn@"$YARN_VERSION" && \
-    npm cache clear --force && \
     wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb && \
     dpkg --unpack google-chrome-stable_current_amd64.deb && \
     apt-get install -f -y && \
@@ -27,6 +27,14 @@ RUN apt-get update &&  \
     rm google-chrome-stable_current_amd64.deb && \
     mkdir Sources && \
     mkdir -p /root/.cache/yarn/
+
+RUN npm install -g --unsafe-perm npm@"$NPM_VERSION" \
+                                 cordova@"$CORDOVA_VERSION" \
+                                 cordova-res@"$CORDOVA_RES_VERSION" \
+                                 ionic@"$IONIC_VERSION" \
+                                 yarn@"$YARN_VERSION" \
+                                 native-run@"$NATIVE_RUN_VERSION" && \
+    npm cache clear --force
 
 # Font libraries
 RUN apt-get -qqy install fonts-ipafont-gothic xfonts-100dpi xfonts-75dpi xfonts-cyrillic xfonts-scalable libfreetype6 libfontconfig
@@ -62,7 +70,7 @@ RUN mkdir /opt/gradle && cd /opt/gradle && \
 ENV PATH ${PATH}:${ANDROID_HOME}/tools:${ANDROID_HOME}/platform-tools:/opt/gradle/gradle-${GRADLE_VERSION}/bin
 
 # Install Android SDK
-RUN yes Y | ${ANDROID_HOME}/tools/bin/sdkmanager "build-tools;28.0.3" "platforms;android-28" "platform-tools"
+RUN yes Y | ${ANDROID_HOME}/tools/bin/sdkmanager "build-tools;29.0.3" "platforms;android-29" "platform-tools"
 RUN cordova telemetry off
 
 WORKDIR Sources
